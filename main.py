@@ -1,4 +1,4 @@
-import os
+import pytesseract
 pytesseract.pytesseract.tesseract_cmd = "/usr/bin/tesseract"
 
 from flask import Flask, request, jsonify
