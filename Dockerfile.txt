@@ -1,0 +1,26 @@
+FROM python:3.11-slim
+
+# Installer Tesseract + dépendances système
+RUN apt-get update && apt-get install -y \
+    tesseract-ocr \
+    libglib2.0-0 \
+    libsm6 \
+    libxrender1 \
+    libxext6 \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Définir le répertoire de travail
+WORKDIR /app
+
+# Copier les fichiers
+COPY . .
+
+# Installer les dépendances Python
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Exposer le port utilisé par Gunicorn
+EXPOSE 10000
+
+# Lancer Gunicorn
+CMD ["gunicorn", "--bind", "0.0.0.0:10000", "main:app"]
